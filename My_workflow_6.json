@@ -1,0 +1,454 @@
+{
+  "name": "My workflow 6",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -140,
+        -80
+      ],
+      "id": "7a7c4ae3-783e-4c62-bc69-842633ceb29c",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json[\"snippet\"].toLowerCase().includes(\"hayakawa\")}}\n",
+                    "rightValue": "=hayakawa",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "b25f00d3-f968-4fed-9e66-b38577de5903"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "487ff8fa-00c4-43b6-b173-a1c7468d931e",
+                    "leftValue": "={{$json[\"snippet\"].toLowerCase().includes(\"infosys\")}}\n",
+                    "rightValue": "infosys",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        980,
+        -120
+      ],
+      "id": "4ded4208-f79c-475b-a578-7a1b784c7b52",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"id\"]}}",
+        "labelIds": [
+          "Label_8677372374896133049"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        -100
+      ],
+      "id": "4086320d-7e07-4e4c-82c3-72f60f35dc8c",
+      "name": "Gmail",
+      "webhookId": "89f784ed-694e-4335-8242-bd77ee66dc76",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"id\"]}}",
+        "labelIds": [
+          "Label_1730322206991296728"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        100
+      ],
+      "id": "e4f2f4b0-4c9d-45aa-a60c-68c852c97aec",
+      "name": "Gmail1",
+      "webhookId": "3c38b47e-2e4f-4469-91ee-87d67a1fec1d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDIz_Ex8RL7lvsTVt2Rqi0TerROmQVduBo",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Summarize this email:\\n\\n{{$json[\\\"snippet\\\"]}}\"\n        }\n      ]\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        980,
+        20
+      ],
+      "id": "14638e67-988b-4ae5-8559-ea83f9ce6513",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7ac0a842-0875-49f4-841b-94e76682d839",
+              "leftValue": "={{$json[\"snippet\"].toLowerCase()}}",
+              "rightValue": "hayakawa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        200,
+        -80
+      ],
+      "id": "8724f29f-5cb9-4c7c-93cc-4ccefbc09ba8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a78b3d5f-3895-4ecf-b918-37be4d8588b6",
+              "leftValue": "={{$json[\"snippet\"].toLowerCase()}}",
+              "rightValue": "infosys",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        180,
+        120
+      ],
+      "id": "48e33a5f-dc51-4dd4-b404-d31b138a8211",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d3bd6a99-779d-475d-b682-06f74196a129",
+              "leftValue": "={{$json[\"snippet\"].toLowerCase()}}",
+              "rightValue": "kaggle",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        200,
+        -280
+      ],
+      "id": "4ec41939-517a-42f6-a309-beb351eff397",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"id\"]}}",
+        "labelIds": [
+          "Label_1681896450334462101"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        -300
+      ],
+      "id": "84432086-8e90-4c51-b267-c4640c8c7045",
+      "name": "Gmail2",
+      "webhookId": "efb47a79-8aa7-46a4-90cc-f5b48638fc39",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Gmail Trigger": [
+      {
+        "json": {
+          "id": "1979368e0387091d",
+          "threadId": "1979368cbc130b82",
+          "snippet": "hayakawa",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 575,
+          "historyId": "308772",
+          "internalDate": "1750524799000",
+          "labels": [
+            {
+              "id": "SENT",
+              "name": "SENT"
+            },
+            {
+              "id": "INBOX",
+              "name": "INBOX"
+            },
+            {
+              "id": "IMPORTANT",
+              "name": "IMPORTANT"
+            },
+            {
+              "id": "UNREAD",
+              "name": "UNREAD"
+            }
+          ],
+          "Subject": "",
+          "From": "Mohan Kirushna R <mohankirushnaofficial@gmail.com>",
+          "To": "Mohan Kirushna R <mohankirushnaofficial@gmail.com>"
+        }
+      },
+      {
+        "json": {
+          "id": "1979368bad20e5d7",
+          "threadId": "1979368aa5ea02ec",
+          "snippet": "infosys",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 573,
+          "historyId": "308754",
+          "internalDate": "1750524789000",
+          "labels": [
+            {
+              "id": "SENT",
+              "name": "SENT"
+            },
+            {
+              "id": "INBOX",
+              "name": "INBOX"
+            },
+            {
+              "id": "IMPORTANT",
+              "name": "IMPORTANT"
+            },
+            {
+              "id": "UNREAD",
+              "name": "UNREAD"
+            }
+          ],
+          "Subject": "",
+          "From": "Mohan Kirushna R <mohankirushnaofficial@gmail.com>",
+          "To": "Mohan Kirushna R <mohankirushnaofficial@gmail.com>"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Gmail": {
+      "main": [
+        []
+      ]
+    },
+    "Gmail1": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Gmail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Gmail2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "06e0f451-05fe-4fd4-b351-811d36d69686",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6ff4de51babbac968400ef8a8c236d97f6c8097d7a3eb164b5bc684a4cbd52fa"
+  },
+  "id": "IQ5MoqL74ww559HT",
+  "tags": []
+}

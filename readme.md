@@ -38,7 +38,7 @@ Welcome to an exciting automation project that streamlines your email management
 ---
 
 ## 🧩 Version 2: `My_workflow_6` (Minimal Email Sorter)
-(![image](https://github.com/user-attachments/assets/c935f088-2c85-4dfd-9099-8a174352ec43)
+![image](https://github.com/user-attachments/assets/c935f088-2c85-4dfd-9099-8a174352ec43)
 
 
 ### ✨ What it does:

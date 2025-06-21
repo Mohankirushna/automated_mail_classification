@@ -7,7 +7,6 @@ Welcome to an exciting automation project that streamlines your email management
 ## 🧠 Version 1: `full_working_workflow_6` (Gemini + Telegram Bot Integration)
 ![Workflow Preview](https://github.com/user-attachments/assets/f41255e1-0584-43ee-ace1-d3cf29a53cbc)
 
-
 ### ✨ What it does:
 
 ✅ Automatically triggers when a **new email** arrives in your Gmail inbox  
@@ -38,7 +37,33 @@ Welcome to an exciting automation project that streamlines your email management
 
 ---
 
-### 🖼️ Workflow Preview
+## 🧩 Version 2: `My_workflow_6` (Minimal Email Sorter)
+![Workflow Preview](![image](https://github.com/user-attachments/assets/c935f088-2c85-4dfd-9099-8a174352ec43)
 
-```plaintext
-Gmail Trigger 🔁 ➜ Extract Subject & Body 🧾 ➜ Gemini API Call 🤖 ➜ Label Email 🎯 ➜ Notify via Telegram Bot 📲
+
+### ✨ What it does:
+
+✅ Automatically triggers when a **new email** arrives in your Gmail inbox  
+🏷️ Applies simple, rule-based logic (via `Switch` nodes) to classify the email into categories such as:
+- `college`
+- `internship`
+- `placement`
+- `finance`
+- `events`
+- `other`
+
+📌 Emails are directly moved to their respective Gmail labels without any AI-based classification  
+❌ No Gemini integration  
+❌ No Telegram notifications
+
+---
+
+### ⚙️ Tools Used
+
+- 🔗 [n8n](https://n8n.io/)
+- 💌 Gmail API
+
+This version is lightweight, fast, and suitable for simple rule-based email management setups.
+
+---
+

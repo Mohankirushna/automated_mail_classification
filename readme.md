@@ -33,7 +33,6 @@ Welcome to an exciting automation project that streamlines your email management
 - 💌 Gmail API (for email access and label manipulation)
 - 🔮 Gemini 1.5 Flash API (for AI-powered email classification)
 - 🤖 Telegram Bot API (to notify you in real-time via chat)
-- 🌐 Ngrok (for local webhook tunneling)
 
 ---
 

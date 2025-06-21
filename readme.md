@@ -5,7 +5,7 @@ Welcome to an exciting automation project that streamlines your email management
 ---
 
 ## 🧠 Version 1: `full_working_workflow_6` (Gemini + Telegram Bot Integration)
-(https://github.com/user-attachments/assets/f41255e1-0584-43ee-ace1-d3cf29a53cbc)
+![Workflow Preview](https://github.com/user-attachments/assets/f41255e1-0584-43ee-ace1-d3cf29a53cbc)
 
 ### ✨ What it does:
 

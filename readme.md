@@ -65,4 +65,25 @@ Welcome to an exciting automation project that streamlines your email management
 This version is lightweight, fast, and suitable for simple rule-based email management setups.
 
 ---
+### 🧠 Version 3: `updated_correct`  
+🔗 *Gemini-Powered + Fully Corrected Labeling & Telegram Summary*
+
+#### ✨ What it does:
+- ✅ Automatically triggers when a new email arrives in your Gmail inbox  
+- 🧠 Sends the email's **subject** and **body** to **Gemini 1.5 Flash API** using a structured JSON prompt  
+- 🏷️ Gemini classifies the email into one of the following labels:college, internship, placement, finance, events, other
+
+- 📝 Gemini also generates a **brief summary** of the email  
+- 📌 The email is automatically **moved into its corresponding Gmail label**  
+- 📢 A real-time **Telegram notification** is sent with:
+- ✅ Classified label  
+- 📨 Email subject  
+- 🧾 Gmail Message ID  
+- 📝 AI-generated summary  
+
+#### ⚙️ Tools Used:
+- 🔗 [n8n](https://n8n.io) – Open-source workflow automation  
+- 💌 Gmail API – To read emails and apply labels  
+- 🔮 Gemini 1.5 Flash API – For AI-powered classification and summarization  
+- 🤖 Telegram Bot API – To notify you in real-time
 

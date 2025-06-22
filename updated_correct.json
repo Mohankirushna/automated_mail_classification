@@ -1,0 +1,826 @@
+{
+  "name": "My workflow 10",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2380,
+        540
+      ],
+      "id": "55bf115b-3ca6-4648-8c8c-c79b95dbd762",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json[\"snippet\"].toLowerCase().includes(\"hayakawa\")}}\n",
+                    "rightValue": "=hayakawa",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "b25f00d3-f968-4fed-9e66-b38577de5903"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "487ff8fa-00c4-43b6-b173-a1c7468d931e",
+                    "leftValue": "={{$json[\"snippet\"].toLowerCase().includes(\"infosys\")}}\n",
+                    "rightValue": "infosys",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        480,
+        500
+      ],
+      "id": "5f4fe01d-1b86-44a0-a6b7-164028ee3497",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"id\"]}}",
+        "labelIds": [
+          "Label_8677372374896133049"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        700,
+        820
+      ],
+      "id": "7b9100ca-48c4-4a17-8b19-d8be6e9c4dde",
+      "name": "Gmail",
+      "webhookId": "2564a5b9-8bc6-455c-8971-d979fe436002",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"id\"]}}",
+        "labelIds": [
+          "Label_1730322206991296728"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        620,
+        1160
+      ],
+      "id": "4417c59e-4174-47ee-b600-0ed9ba5385aa",
+      "name": "Gmail1",
+      "webhookId": "86d9cdb6-ce82-43c4-af86-0985664e4b6d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyCEHbMDz-KvlZWJ5hHeNBc6BElY3srG0VQ",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"You are an intelligent email classifier and summarizer. Please analyze this email and respond in this exact JSON format:\\n\\n{\\n  \\\"label\\\": \\\"one_of: college, internship, finance, placement, events, other\\\",\\n  \\\"summary\\\": \\\"Brief 2-3 sentence summary of the email content\\\"\\n}\\n\\nSubject: {{$json.extractedSubject}}\\n\\nBody: {{$json.extractedBody}}\\n\\nRespond ONLY with the JSON object, no additional text.\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1900,
+        560
+      ],
+      "id": "ee7a96aa-44fa-4699-876d-3e7ba3c44679",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7ac0a842-0875-49f4-841b-94e76682d839",
+              "leftValue": "={{$json[\"snippet\"].toLowerCase()}}",
+              "rightValue": "hayakawa",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        420,
+        640
+      ],
+      "id": "4aa8ceed-1d94-49c7-af7e-d85aa916b90a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a78b3d5f-3895-4ecf-b918-37be4d8588b6",
+              "leftValue": "={{$json[\"snippet\"].toLowerCase()}}",
+              "rightValue": "infosys",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        820
+      ],
+      "id": "c432bdbd-2cde-4a78-90c7-2aedea9288e9",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d3bd6a99-779d-475d-b682-06f74196a129",
+              "leftValue": "={{$json[\"snippet\"].toLowerCase()}}",
+              "rightValue": "kaggle",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "43bf530b-b836-42b9-bcea-fbb5dbe6bb7f",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"id\"]}}",
+        "labelIds": [
+          "Label_1681896450334462101"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        320,
+        240
+      ],
+      "id": "fafc8f15-9376-4dfd-806e-6989fbf5bdd3",
+      "name": "Gmail2",
+      "webhookId": "02c0c4e2-8f90-42ac-8d0e-4b474bb29e95",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the input data - n8n provides this as $input.all() or $json\nconst inputData = $input.all();\n\nreturn inputData.map((item, index) => {\n  const messageData = item.json;\n  \n  // Extract Subject - it's directly available in the response\n  let subject = messageData.Subject || '[No Subject Found]';\n  \n  // Clean up subject if it has \"Subject: \" prefix\n  if (subject.startsWith('Subject: ')) {\n    subject = subject.substring(9);\n  }\n  \n  // Extract body from snippet (Gmail API provides snippet for basic text)\n  let body = messageData.snippet || '[No body found]';\n  \n  // Try to extract from payload if available\n  function extractPlainText(part) {\n    if (!part) return '';\n    \n    // Check if this part is plain text\n    if (part.mimeType === 'text/plain' && part.body?.data) {\n      try {\n        // Decode base64url (Gmail uses base64url encoding)\n        const base64Data = part.body.data.replace(/-/g, '+').replace(/_/g, '/');\n        const buff = Buffer.from(base64Data, 'base64');\n        return buff.toString('utf-8');\n      } catch (err) {\n        console.error('Error decoding base64:', err);\n        return '';\n      }\n    }\n    \n    // If this part has sub-parts, search recursively\n    if (part.parts && Array.isArray(part.parts)) {\n      for (const subPart of part.parts) {\n        const result = extractPlainText(subPart);\n        if (result) return result;\n      }\n    }\n    \n    return '';\n  }\n  \n  // Try to get full body from payload if available\n  try {\n    if (messageData.payload && messageData.payload.parts) {\n      const extractedBody = extractPlainText(messageData.payload);\n      if (extractedBody && extractedBody.length > body.length) {\n        body = extractedBody;\n      }\n    }\n  } catch (err) {\n    console.error('Error extracting full body:', err);\n    // Keep using snippet as fallback\n  }\n  \n  // Return the processed data while preserving the original input\n  return {\n    json: {\n      // Include original data\n      ...messageData,\n      // Add extracted fields\n      extractedSubject: subject,\n      extractedBody: body,\n      messageId: messageData.id\n    },\n    // Preserve the original item index for n8n\n    pairedItem: { item: index }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2120,
+        560
+      ],
+      "id": "19e545d4-1759-48a7-92ba-dc1f01dab92b",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all input items to maintain proper data flow\nconst inputItems = $input.all();\n\nreturn inputItems.map((item, index) => {\n  // Get the HTTP response data from Gemini\n  const responseData = item.json;\n  \n  // Get the original email data from the first Code node\n  // We need to access the data that was passed through the HTTP request\n  const originalEmailData = $('Code').first().json;\n  \n  // Extract the response from Gemini API\n  const geminiResponseText = responseData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '{\"label\": \"other\", \"summary\": \"No summary available\"}';\n  \n  let label = 'other';\n  let summary = 'No summary available';\n  \n  try {\n    // Try to parse as JSON first (if Gemini returned proper JSON)\n    const parsedResponse = JSON.parse(geminiResponseText);\n    label = parsedResponse.label || 'other';\n    summary = parsedResponse.summary || 'No summary available';\n  } catch (error) {\n    console.log('JSON parsing failed, trying text extraction');\n    console.log('Raw Gemini response:', geminiResponseText);\n    \n    // Fallback 1: Look for JSON-like structure in the text\n    const jsonMatch = geminiResponseText.match(/\\{[\\s\\S]*\\}/);\n    if (jsonMatch) {\n      try {\n        const parsedJson = JSON.parse(jsonMatch[0]);\n        label = parsedJson.label || 'other';\n        summary = parsedJson.summary || 'No summary available';\n      } catch (innerError) {\n        console.log('JSON extraction also failed, using text parsing');\n        \n        // Fallback 2: Extract from plain text\n        const lowerResponse = geminiResponseText.toLowerCase();\n        \n        // Extract label\n        if (lowerResponse.includes('college')) label = 'college';\n        else if (lowerResponse.includes('internship')) label = 'internship';\n        else if (lowerResponse.includes('finance')) label = 'finance';\n        else if (lowerResponse.includes('placement')) label = 'placement';\n        else if (lowerResponse.includes('events')) label = 'events';\n        \n        // Extract summary - take first few sentences\n        const sentences = geminiResponseText.split(/[.!?]+/).filter(s => s.trim().length > 10);\n        if (sentences.length > 0) {\n          summary = sentences.slice(0, 2).join('. ').trim();\n          if (!summary.endsWith('.')) summary += '.';\n        } else {\n          summary = geminiResponseText.substring(0, 150) + '...';\n        }\n      }\n    } else {\n      // Pure text response - extract what we can\n      const lowerResponse = geminiResponseText.toLowerCase();\n      \n      // Extract label\n      if (lowerResponse.includes('college')) label = 'college';\n      else if (lowerResponse.includes('internship')) label = 'internship';\n      else if (lowerResponse.includes('finance')) label = 'finance';\n      else if (lowerResponse.includes('placement')) label = 'placement';\n      else if (lowerResponse.includes('events')) label = 'events';\n      \n      // Use the entire response as summary if it's reasonable length\n      if (geminiResponseText.length > 10 && geminiResponseText.length < 300) {\n        summary = geminiResponseText;\n      } else {\n        summary = 'Classification completed - check email for details';\n      }\n    }\n  }\n  \n  return {\n    json: {\n      // Classification and summary from Gemini\n      label: label,\n      summary: summary,\n      \n      // Original email data from the first Code node\n      extractedSubject: originalEmailData.extractedSubject || 'No Subject',\n      extractedBody: originalEmailData.extractedBody || 'No Body',\n      messageId: originalEmailData.messageId || originalEmailData.id || 'unknown',\n      \n      // Debug info\n      rawGeminiResponse: geminiResponseText,\n      originalResponse: responseData\n    },\n    // Maintain pairing with input items\n    pairedItem: { item: index }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1660,
+        560
+      ],
+      "id": "eb5f4db9-4450-4542-b272-26a0cc207d5e",
+      "name": "Extract Subject and Body"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json[\"label\"]}}",
+                    "rightValue": "college",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "32eef47e-e5f4-40b1-b8bd-3b4bb4380e2e"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1340,
+        100
+      ],
+      "id": "db4acd1d-c688-45c1-995c-8db7e5d76531",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json[\"label\"]}}",
+                    "rightValue": "internship",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "8764a7f7-513a-4942-8000-72f4a24f8096"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1340,
+        340
+      ],
+      "id": "5280b640-1621-48cf-a6af-56f826f6b9d0",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json[\"label\"]}}",
+                    "rightValue": "finances",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "4566ab96-71f9-4228-b866-d4e8c79dcbcd"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1340,
+        500
+      ],
+      "id": "31725ee1-6c0b-4e90-afad-8d45437da282",
+      "name": "Switch3"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json[\"label\"]}}",
+                    "rightValue": "placement",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "011b0cf7-8604-4873-a1d3-fae46007596b"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1320,
+        660
+      ],
+      "id": "a7a10a67-f1ca-4497-a57c-9cf98671dfa8",
+      "name": "Switch4"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json[\"label\"]}}",
+                    "rightValue": "sociall",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d6b8ae92-68bb-4b9d-a069-d0366d8e2cac"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1420,
+        900
+      ],
+      "id": "f378a76f-5f5a-4043-84b2-43a71917d04f",
+      "name": "Switch5"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"messageId\"]}}",
+        "labelIds": [
+          "Label_8423292708961187298"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1120,
+        100
+      ],
+      "id": "8fad3797-b3cf-48b5-9fdc-4dabc009b243",
+      "name": "Gmail3",
+      "webhookId": "a226906c-aa2a-4254-9c3c-be32d72a3018",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"messageId\"]}}",
+        "labelIds": [
+          "Label_1412393615372827864"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1120,
+        340
+      ],
+      "id": "96870104-65e1-4a65-9876-aeef85880af9",
+      "name": "Gmail4",
+      "webhookId": "122fbe32-49e5-4941-b7fd-4aacaba6248a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"messageId\"]}}",
+        "labelIds": [
+          "Label_1532867652596064271"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1120,
+        500
+      ],
+      "id": "95dd3c19-6d64-4599-9544-0cb5b3f23185",
+      "name": "Gmail5",
+      "webhookId": "32821552-6199-4582-aabe-9fd764bf2c55",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"messageId\"]}}",
+        "labelIds": [
+          "Label_5586384692348987630"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1080,
+        680
+      ],
+      "id": "fc02f500-2c8b-4d5a-9749-46aa60616b84",
+      "name": "Gmail6",
+      "webhookId": "b1da68c9-bdd9-4ec0-ac61-bd4a5526256d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{$json[\"messageId\"]}}",
+        "labelIds": [
+          "Label_6987034048817950953"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1200,
+        900
+      ],
+      "id": "08c829b9-ed32-40cf-b2e5-92ed399d48a6",
+      "name": "Gmail7",
+      "webhookId": "c9da0ae8-55f5-4263-b5e0-5988f19a82b8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8p1JO6x6xCcGbKfd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1965547044",
+        "text": "=📬 *New Email Alert!*\n\n📩 *Label:* {{$json[\"label\"]}}\n📌 *Subject:* {{$json[\"extractedSubject\"]}}\n📝 *Summary:* {{$json[\"summary\"]}}\n🧾 *Message ID:* {{$json[\"messageId\"]}}\n\n🤖 _Automated by n8n_",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -780,
+        580
+      ],
+      "id": "6646319c-1235-4cab-9fd3-94ddd5e222ff",
+      "name": "Telegram",
+      "webhookId": "b442c34c-8990-4144-8884-4531a4d2110b",
+      "credentials": {
+        "telegramApi": {
+          "id": "1HlKfDyLJeOa52Mw",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Extract Subject and Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Gmail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Gmail2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Subject and Body": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Gmail3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch3": {
+      "main": [
+        [
+          {
+            "node": "Gmail5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch5": {
+      "main": [
+        [
+          {
+            "node": "Gmail7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Gmail4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch4": {
+      "main": [
+        [
+          {
+            "node": "Gmail6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a5041bab-5a1a-4e30-bf4a-02914bad683d",
+  "meta": {
+    "instanceId": "6ff4de51babbac968400ef8a8c236d97f6c8097d7a3eb164b5bc684a4cbd52fa"
+  },
+  "id": "tagcDQg1G37FLB7O",
+  "tags": []
+}
